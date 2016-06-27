@@ -1,15 +1,45 @@
-## Put comments here that give an overall description of what your
-## functions do
+## These functions are able to create a repository of inverse matrices by caching them.
+## If a function has already been solved, it will be searched for in the repository. 
 
-## Write a short comment describing this function
+## This function creates an empty matrix that is used to cache inverses.
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(x = matrix()) 
+{
+  m <- NULL
+  set <- function(matrix) 
+  {
+    x <<- matrix
+    m <<- NULL
+  }
+  get <- function()
+  {
+    x
+  } 
+  setsolve <- function(inverse)
+  {
+    m<<-inverse
+  } 
+  getsolve <- function()
+    {
+    m
+    }
+  list(set = set, get = get,
+       setsolve = setsolve,
+       getsolve = getsolve)
 }
 
 
-## Write a short comment describing this function
-
+## This function searches for the matrix in the repository and if it is not there, computes and then stores it. 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  s <- x$getsolve()
+  if(!is.null(s)) {
+    message("getting cached data")
+    return(s)
+  }
+  data <- x$get()
+  s <- solve(data) %*% data
+  x$setsolve(s)
+  s
 }
+
+
